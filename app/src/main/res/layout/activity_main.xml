@@ -24,7 +24,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/go_schedule_button"
         app:layout_constraintVertical_bias="0.53"
-        tools:listitem="@layout/list_item" />
+        tools:listitem="@layout/course_item" />
 
     <Button
         android:id="@+id/go_schedule_button"

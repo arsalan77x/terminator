@@ -32,12 +32,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
+        callJSON();
         RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter = new Recycle(this, viewItems);
         mRecyclerView.setAdapter(mAdapter);
-        callJSON();
     }
 
     private void callJSON() {
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 String id = itemObj.getString("id");
                 String exam_time = itemObj.getString("exam_time");
 
-                Courses courses = new Courses(name,info,course_id,course_number,instructor,
+                Course courses = new Course(name,info,course_id,course_number,instructor,
                         class_times,exam_time,Integer.parseInt(units),Integer.parseInt(capacity),
                         Integer.parseInt(id));
                 viewItems.add(courses);
@@ -91,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void launchSecondActivity(View view) {
         Log.d(LOG_TAG, "Button clicked!");
-        Intent intent = new Intent(this, SecondActivity.class);
+        Intent intent = new Intent(this, ScheduleActivity.class);
         startActivity(intent);
     }
 
