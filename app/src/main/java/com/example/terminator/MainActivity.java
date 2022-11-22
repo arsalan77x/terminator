@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 String class_times = itemObj.getString("class_times");
                 String id = itemObj.getString("id");
                 String exam_time = itemObj.getString("exam_time");
-                Log.d(LOG_TAG,name);
+
                 Courses courses = new Courses(name,info,course_id,course_number,instructor,
                         class_times,exam_time,Integer.parseInt(units),Integer.parseInt(capacity),
                         Integer.parseInt(id));

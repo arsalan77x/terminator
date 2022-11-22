@@ -33,10 +33,6 @@ public class Courses {
         return name;
     }
 
-    public String getCourse_id() {
-        return course_id;
-    }
-
     public String getInstructor() {
         return instructor;
     }
