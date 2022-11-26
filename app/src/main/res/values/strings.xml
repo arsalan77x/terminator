@@ -2,6 +2,10 @@
     <string name="app_name">terminator</string>
     <string name="course_choose_title">Course list</string>
     <string name="course_name">Course name</string>
-    <string name="schedule_title">Weekly schedule </string>
+    <string name="schedule_title">برنامه هفتگی</string>
     <string name="info_str">اطلاعات:</string>
+    <string-array name="departments">
+        <item>دانشکده ریاضی</item>
+        <item>دانشکده کامپیوتر</item>
+    </string-array>
 </resources>

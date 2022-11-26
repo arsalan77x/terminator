@@ -13,15 +13,20 @@
         android:theme="@style/Theme.Terminator"
         tools:targetApi="31">
         <activity
+            android:name=".selectDepartmentActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ScheduleActivity"
-            android:label = "Weekly Schedule"
+            android:label="Weekly Schedule"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
-
         <activity
             android:name=".MainActivity"
             android:exported="true">

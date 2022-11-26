@@ -1,13 +1,21 @@
 package com.example.terminator;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,22 +34,61 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private final List<Object> viewItems = new ArrayList<>();
     private static final String TAG = "MainActivity";
+    String[] departments = { "Math","Computer"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(layoutManager);
-        callJSON();
-        RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter = new Recycle(this, viewItems);
-        mRecyclerView.setAdapter(mAdapter);
+
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.departments, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+
+
+        Context c = getApplicationContext();
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id){
+                ((TextView) parentView.getChildAt(0)).setTextColor(Color.WHITE); // bug when rotate
+                ((TextView) parentView.getChildAt(0)).setTextSize(16);
+                String department = "math";
+                if (spinner.getSelectedItem().toString().equals("دانشکده ریاضی"))
+                    department = "math";
+                else if  (spinner.getSelectedItem().toString().equals("دانشکده کامپیوتر"))
+                    department = "computer";
+
+                RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(c);
+                mRecyclerView.setLayoutManager(layoutManager);
+                viewItems.clear();
+                callJSON(department);
+                RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter = new Recycle(c, viewItems);
+                mRecyclerView.setAdapter(mAdapter);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                ((TextView) parentView.getChildAt(0)).setTextColor(Color.WHITE);
+                ((TextView) parentView.getChildAt(0)).setTextSize(16);
+                callJSON("math");
+            }
+
+        });
+
     }
 
-    private void callJSON() {
+
+
+    private void callJSON(String department) {
         try {
-            String jsonDataString = readJSONFile();
+            String jsonDataString = readJSONFile(department);
             JSONArray jsonArray = new JSONArray(jsonDataString);
             for (int i=0; i<jsonArray.length(); ++i) {
                 JSONObject itemObj = jsonArray.getJSONObject(i);
@@ -67,12 +114,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private String readJSONFile() throws IOException{
+    private String readJSONFile(String department) throws IOException{
         InputStream inputStream = null;
         StringBuilder output = new StringBuilder();
+        int resId = this.getResources().getIdentifier(department, "raw", this.getPackageName());
         try {
             String jsonString = null;
-            inputStream = getResources().openRawResource(R.raw.a);
+            inputStream = getResources().openRawResource(resId);
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             while ((jsonString = bufferedReader.readLine()) != null) {
