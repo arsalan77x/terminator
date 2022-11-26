@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     private void callJSON() {
         try {
             String jsonDataString = readJSONFile();
-
             JSONArray jsonArray = new JSONArray(jsonDataString);
             for (int i=0; i<jsonArray.length(); ++i) {
                 JSONObject itemObj = jsonArray.getJSONObject(i);

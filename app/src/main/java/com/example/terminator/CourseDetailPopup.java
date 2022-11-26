@@ -1,6 +1,8 @@
 package com.example.terminator;
 
 import android.annotation.SuppressLint;
+import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -11,13 +13,20 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 public class CourseDetailPopup {
     Course course;
+    ArrayList<Course> selectedCourses = new ArrayList<>();
+    ArrayList<Integer> scheduledTimes = new ArrayList<>();
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     public CourseDetailPopup(Course course) {
         this.course = course;
     }
 
+    @SuppressLint("SetTextI18n")
     public void showPopupWindow(final View view) {
 
 
@@ -34,24 +43,62 @@ public class CourseDetailPopup {
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
 
-        TextView test2 = popupView.findViewById(R.id.course_number);
-        test2.setText(this.course.getName());
-
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button addButton = popupView.findViewById(R.id.add_button);
+        TextView courseNamePopUp = popupView.findViewById(R.id.course_name);
+        courseNamePopUp.setText(this.course.getName());
+        TextView instructorPopUp = popupView.findViewById(R.id.instructor);
+        instructorPopUp.setText(this.course.getInstructor());
+        TextView courseNumberPopUp = popupView.findViewById(R.id.course_number);
+        courseNumberPopUp.setText(this.course.getCourse_number());
+        TextView classTimePopUp = popupView.findViewById(R.id.class_time);
+        classTimePopUp.setText(this.course.getClass_times());
+        TextView examTimePopUp = popupView.findViewById(R.id.exam_time);
+        examTimePopUp.setText(this.course.getExam_time());
+        TextView infoPopUp = popupView.findViewById(R.id.info);
+        infoPopUp.setText("اطلاعات: " + this.course.getInfo());
+        infoPopUp.setMovementMethod(new ScrollingMovementMethod());
+        TextView unitPopUp = popupView.findViewById(R.id.course_unit);
+        unitPopUp.setText(Integer.toString(this.course.getUnits()));
+        TextView capacityPopUp = popupView.findViewById(R.id.course_capacity);
+        capacityPopUp.setText(Integer.toString(this.course.getCapacity()));
+        
+        Button addButton = popupView.findViewById(R.id.add_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (true) {
+                if (selectedCourses.size() == 0 || !isDatesOverlapped()) {
+                    selectedCourses.add(course);
                     Toast.makeText(view.getContext(), "این درس به برنامه شما اضافه شد", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(view.getContext(), "تداخل با برنامه درسی", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button cancelButton = popupView.findViewById(R.id.cancel_button);
+        Button cancelButton = popupView.findViewById(R.id.cancel_button);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();
             }
         });
+    }
+    
+    public boolean isDatesOverlapped(){
+        for (int i = 0; i < selectedCourses.size(); i++) {
+            int dayLength = selectedCourses.get(i).getDays().size();
+            for (int j = 0; j < dayLength; j++) {
+                for (int k = 0; k < course.getDays().size(); k++) {
+                    if (Objects.equals(selectedCourses.get(i).getDays().get(j), course.getDays().get(k))){
+                        if (selectedCourses.get(i).getStart_times().get(j) < course.getEnd_times().get(k))
+                            return true;
+                        if (selectedCourses.get(i).getEnd_times().get(j) > course.getStart_times().get(k))
+                            return true;
+                    }
+                }
+
+            }
+        }
+        return false;
     }
 }
