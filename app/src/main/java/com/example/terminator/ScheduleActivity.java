@@ -35,7 +35,7 @@ public class ScheduleActivity extends AppCompatActivity {
                 "20:00",
         };
 
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) LinearLayout saturdayLinear = (LinearLayout) findViewById(R.id.saturday_sub_linear);
+        LinearLayout saturdayLinear = (LinearLayout) findViewById(R.id.saturday_sub_linear);
         for (int i = 0; i < times.length; i++) {
             TextView textView = new TextView(this);
             textView.setText(times[i]);
@@ -49,37 +49,14 @@ public class ScheduleActivity extends AppCompatActivity {
             saturdayLinear.addView(textView);
         }
 
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) RecyclerView saturdayRecyclerview = (RecyclerView) findViewById(R.id.saturday_recyclerView);
+        RecyclerView saturdayRecyclerview = (RecyclerView) findViewById(R.id.saturday_recyclerView);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         saturdayRecyclerview
                 .setLayoutManager(layoutManager);
 
-        List<Object> courses = new ArrayList<>();
-        courses.add(new Course(
-                "asldjkflkajsdfllsk",
-                "asldjkflkajsdfllsk",
-                "asldjkflkajsdfllsk",
-                "asldjkflkajsdfllsk",
-                "asldjkflkajsdfllsk",
-                "asldjkflkajsdfllsk",
-                "asldjkflkajsdfllsk",
-                1,
-                1,
-                1
-        ));
-        courses.add(new Course(
-                "asldjkflkajsdfllsk",
-                "asldjkflkajsdfllsk",
-                "asldjkflkajsdfllsk",
-                "asldjkflkajsdfllsk",
-                "asldjkflkajsdfllsk",
-                "asldjkflkajsdfllsk",
-                "asldjkflkajsdfllsk",
-                1,
-                1,
-                1
-        ));
-        RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter = new Recycle(this, courses);
+        List<Object> courses = new ArrayList<>(CourseDetailPopup.selectedCourses);
+
+        RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter = new Recycle(this,  courses);
         saturdayRecyclerview.setAdapter(mAdapter);
     }
 }
