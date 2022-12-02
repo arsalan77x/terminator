@@ -35,26 +35,60 @@ public class ScheduleActivity extends AppCompatActivity {
                 "20:00",
         };
 
-        LinearLayout saturdayLinear = (LinearLayout) findViewById(R.id.saturday_sub_linear);
-        for (int i = 0; i < times.length; i++) {
-            TextView textView = new TextView(this);
-            textView.setText(times[i]);
+        LinearLayout parent = (LinearLayout) findViewById(R.id.parent);
+        for (int i = 0; i < 7; i++) {
+
+            LinearLayout childLinear = new LinearLayout(context);
+
+            childLinear.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            childLinear.setOrientation(LinearLayout.VERTICAL);
+            TextView title = new TextView(this);
+            title.setText("شنبه");
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
+            params.setMargins(0, 0, 0, 16);
+            title.setLayoutParams(params);
+            childLinear.addView(title);
 
-            params.setMargins(0, 0, 0, 50);
-            textView.setLayoutParams(params);
-            saturdayLinear.addView(textView);
+            LinearLayout horizontalLinear = new LinearLayout(context);
+            horizontalLinear.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            horizontalLinear.setOrientation(LinearLayout.HORIZONTAL);
+            childLinear.addView(horizontalLinear);
+
+            LinearLayout timeLinear = new LinearLayout(context);
+            timeLinear.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            timeLinear.setOrientation(LinearLayout.VERTICAL);
+            childLinear.addView(timeLinear);
+
+            for (int i = 0; i < times.length; i++) {
+                TextView textView = new TextView(this);
+                textView.setText(times[i]);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+
+                params.setMargins(0, 0, 0, 50);
+                textView.setLayoutParams(params);
+                timeLinear.addView(textView);
+            }
+
+
+            parent.addView(childLinear);
+
         }
+
+        LinearLayout saturdayLinear = (LinearLayout) findViewById(R.id.saturday_sub_linear);
+
 
         RecyclerView saturdayRecyclerview = (RecyclerView) findViewById(R.id.saturday_recyclerView);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         saturdayRecyclerview
                 .setLayoutManager(layoutManager);
         List<Object> courses = new ArrayList<>(CourseDetailPopup.selectedCourses);
-        RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter = new Recycle(this,  courses);
+        RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter = new Recycle(this, courses);
         saturdayRecyclerview.setAdapter(mAdapter);
     }
 
