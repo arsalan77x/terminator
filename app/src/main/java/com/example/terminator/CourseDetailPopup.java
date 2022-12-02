@@ -22,9 +22,7 @@ import java.util.Objects;
 public class CourseDetailPopup {
     Course course;
     public static ArrayList<Course> selectedCourses = new ArrayList<>();
-    ArrayList<Integer> scheduledTimes = new ArrayList<>();
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    SharedPreferences sp;
+    public static boolean isStarted = false;
 
     public CourseDetailPopup(Course course) {
         this.course = course;
@@ -32,8 +30,6 @@ public class CourseDetailPopup {
 
     @SuppressLint("SetTextI18n")
     public void showPopupWindow(final View view) {
-
-
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.course_detail_popup_layout, null);
 
@@ -72,6 +68,12 @@ public class CourseDetailPopup {
             public void onClick(View v) {
                 if (selectedCourses.size() == 0 || !isDatesOverlapped()) {
                     selectedCourses.add(course);
+                    SharedPreferences.Editor editor = MainActivity.sp.edit();
+                    for (int i = 0; i < CourseDetailPopup.selectedCourses.size(); i++) {
+                        editor.putInt("id"+i,CourseDetailPopup.selectedCourses.get(i).getId());
+                    }
+                    editor.apply();
+
                     Toast.makeText(view.getContext(), "این درس به برنامه شما اضافه شد", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(view.getContext(), "تداخل با برنامه درسی", Toast.LENGTH_SHORT).show();
@@ -95,18 +97,17 @@ public class CourseDetailPopup {
             for (int j = 0; j < dayLength; j++) {
                 for (int k = 0; k < course.getDays().size(); k++) {
                     if (Objects.equals(selectedCourses.get(i).getDays().get(j), course.getDays().get(k))) {
-                        if (selectedCourses.get(i).getStart_times().get(j) < course.getStart_times().get(k) &&
-                                course.getStart_times().get(k) < selectedCourses.get(i).getEnd_times().get(j)) {
+                        if (selectedCourses.get(i).getStart_times().get(j) <= course.getStart_times().get(k) &&
+                                course.getStart_times().get(k) <= selectedCourses.get(i).getEnd_times().get(j)) {
                             return true;
                         }
-                        if (selectedCourses.get(i).getEnd_times().get(j) > course.getEnd_times().get(k) &&
-                                course.getEnd_times().get(k) > selectedCourses.get(i).getStart_times().get(j)) {
+                        if (selectedCourses.get(i).getEnd_times().get(j) >= course.getEnd_times().get(k) &&
+                                course.getEnd_times().get(k) >= selectedCourses.get(i).getStart_times().get(j)) {
                             return true;
                         }
 
                     }
                 }
-
             }
         }
         return false;

@@ -36,13 +36,16 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private final List<Object> viewItems = new ArrayList<>();
+    public static ArrayList<Course> allCourses = new ArrayList<>();
     private static final String TAG = "MainActivity";
+    public static SharedPreferences sp ;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sp = getSharedPreferences("courses",MODE_PRIVATE);
         Button goScheduleButton = (Button) findViewById(R.id.go_schedule_button);
         Button saveDataButton = (Button) findViewById(R.id.save_data_button);
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
@@ -52,28 +55,34 @@ public class MainActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
         Context c = getApplicationContext();
 
-        SharedPreferences sp = getSharedPreferences("courses",MODE_PRIVATE);
-        SharedPreferences getSp = getApplicationContext().getSharedPreferences("courses",MODE_PRIVATE);
+
+        String department = "math";
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(c);
+        mRecyclerView.setLayoutManager(layoutManager);
+        viewItems.clear();
+        callJSON(department);
+        RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter = new Recycle(c, viewItems);
+        mRecyclerView.setAdapter(mAdapter);
+
         goScheduleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                CourseDetailPopup.isStarted = true;
                 launchSecondActivity(v);
             }
         });
 
-
         saveDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(LOG_TAG,Integer.toString(sp.getAll().size()));
+
                 SharedPreferences.Editor editor = sp.edit();
                 for (int i = 0; i < CourseDetailPopup.selectedCourses.size(); i++) {
                     editor.putInt("id"+i,CourseDetailPopup.selectedCourses.get(i).getId());
                 }
                 editor.apply();
 
-                //int test = getSp.getInt("id1",0);
-                //Log.d(LOG_TAG, Integer.toString(test));
                 Toast.makeText(c, "برنامه شما ذخیره شد.", Toast.LENGTH_SHORT).show();
             }
         });
@@ -106,10 +115,17 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+
+        if (!CourseDetailPopup.isStarted){
+            for (int i = 0; i < sp.getAll().size(); i++) {
+                int id = sp.getInt("id"+i,0);
+                if (Course.getCourseById(id) != null)
+                    CourseDetailPopup.selectedCourses.add(Course.getCourseById(id));
+            }
+        }
+
+
     }
-
-
-
 
     private void callJSON(String department) {
         try {
@@ -127,11 +143,11 @@ public class MainActivity extends AppCompatActivity {
                 String class_times = itemObj.getString("class_times");
                 String id = itemObj.getString("id");
                 String exam_time = itemObj.getString("exam_time");
-
                 Course courses = new Course(name,info,course_id,course_number,instructor,
                         class_times,exam_time,Integer.parseInt(units),Integer.parseInt(capacity),
                         Integer.parseInt(id));
                 viewItems.add(courses);
+                allCourses.add(courses);
             }
 
         } catch (JSONException | IOException e) {

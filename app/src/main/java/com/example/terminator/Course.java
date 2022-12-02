@@ -168,13 +168,15 @@ public class Course {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    public boolean isIntervened(Course course1, Course course2){
-        List<String> myList = new ArrayList<String>(Arrays.asList(course1.getClass_times().split("\n")));
-        Log.d(LOG_TAG, myList.get(0));
 
-        return true;
+
+    public static Course getCourseById(int id){
+        for (int i = 0; i < MainActivity.allCourses.size(); i++) {
+            if (MainActivity.allCourses.get(i).getId() == id)
+                return MainActivity.allCourses.get(i);
+        }
+        return null;
     }
-
 
 }
 

@@ -53,10 +53,9 @@ public class ScheduleActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         saturdayRecyclerview
                 .setLayoutManager(layoutManager);
-
         List<Object> courses = new ArrayList<>(CourseDetailPopup.selectedCourses);
-
         RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter = new Recycle(this,  courses);
         saturdayRecyclerview.setAdapter(mAdapter);
     }
+
 }
