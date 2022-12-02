@@ -13,24 +13,32 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:orientation="horizontal">
 
 
-        <Button
-            android:id="@+id/save_data_button"
-            android:backgroundTint="@color/teal_700"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textSize="18sp"
-            android:text="@string/save"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+        <androidx.cardview.widget.CardView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="8dp"
+            app:cardBackgroundColor="@color/teal_700"
+            app:cardCornerRadius="5dp">
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:spinnerMode="dropdown" />
+
+
+        </androidx.cardview.widget.CardView>
 
         <Button
-            android:layout_weight="1"
+            android:layout_weight=".8"
             android:id="@+id/go_schedule_button"
             android:backgroundTint="@color/teal_700"
             android:layout_width="0dp"
@@ -45,23 +53,7 @@
 
 
     </LinearLayout>
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="8dp"
-        app:cardBackgroundColor="@color/teal_700"
-        app:cardCornerRadius="5dp">
 
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:spinnerMode="dropdown" />
-
-
-    </androidx.cardview.widget.CardView>
     <androidx.recyclerview.widget.RecyclerView
 
         android:id="@+id/recyclerView"

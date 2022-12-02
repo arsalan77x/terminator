@@ -25,7 +25,8 @@ public class Course {
     private ArrayList<Float> start_times = new ArrayList<>();
     private ArrayList<Float> end_times = new ArrayList<>();
     private  ArrayList<Integer> days = new ArrayList<>();
-
+    private float marginBottom = 0.0f;
+    private float padding = 0.0f;
 
     public Course(String name, String info, String course_id, String course_number,
                   String instructor, String class_times, String exam_time, int units, int capacity,
@@ -168,7 +169,9 @@ public class Course {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
-
+    public float getTimeForSort(){
+        return getStart_times().get(0);
+    }
 
     public static Course getCourseById(int id){
         for (int i = 0; i < MainActivity.allCourses.size(); i++) {
@@ -177,6 +180,23 @@ public class Course {
         }
         return null;
     }
+
+    public void setMarginBottom(float marginBottom) {
+        this.marginBottom = marginBottom;
+    }
+
+    public float getMarginBottom() {
+        return marginBottom;
+    }
+
+    public float getPadding() {
+        return padding;
+    }
+
+    public void setPadding(float padding) {
+        this.padding = padding;
+    }
+
 
 }
 

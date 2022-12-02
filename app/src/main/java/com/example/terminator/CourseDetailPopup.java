@@ -1,6 +1,7 @@
 package com.example.terminator;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -15,17 +16,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CourseDetailPopup {
     Course course;
+    boolean isDelete;
     public static ArrayList<Course> selectedCourses = new ArrayList<>();
     public static boolean isStarted = false;
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    public CourseDetailPopup(Course course) {
+    public CourseDetailPopup(Course course, Boolean isDelete) {
         this.course = course;
+        this.isDelete = isDelete;
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -62,22 +70,39 @@ public class CourseDetailPopup {
         capacityPopUp.setText(Integer.toString(this.course.getCapacity()));
 
         Button addButton = popupView.findViewById(R.id.add_button);
+        if (isDelete) {
+            addButton.setText("حذف کردن");
+        }
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectedCourses.size() == 0 || !isDatesOverlapped()) {
-                    selectedCourses.add(course);
+
+                if (isDelete) {
+                    selectedCourses.remove(course);
                     SharedPreferences.Editor editor = MainActivity.sp.edit();
+                    editor.clear();
+                    editor.apply();
+                    Log.d(LOG_TAG, ""+MainActivity.sp.getAll().size());
                     for (int i = 0; i < CourseDetailPopup.selectedCourses.size(); i++) {
-                        editor.putInt("id"+i,CourseDetailPopup.selectedCourses.get(i).getId());
+                        editor.putInt("id" + i, CourseDetailPopup.selectedCourses.get(i).getId());
                     }
                     editor.apply();
+                    Intent intent = new Intent(v.getContext(), ScheduleActivity.class);
+                    v.getContext().startActivity(intent);
+                } else{
+                    if (selectedCourses.size() == 0 || !isDatesOverlapped()) {
+                        selectedCourses.add(course);
+                        SharedPreferences.Editor editor = MainActivity.sp.edit();
+                        for (int i = 0; i < CourseDetailPopup.selectedCourses.size(); i++) {
+                            editor.putInt("id" + i, CourseDetailPopup.selectedCourses.get(i).getId());
+                        }
+                        editor.apply();
 
-                    Toast.makeText(view.getContext(), "این درس به برنامه شما اضافه شد", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(view.getContext(), "تداخل با برنامه درسی", Toast.LENGTH_SHORT).show();
-
+                        Toast.makeText(view.getContext(), "این درس به برنامه شما اضافه شد", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(view.getContext(), "تداخل با برنامه درسی", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -91,7 +116,6 @@ public class CourseDetailPopup {
     }
 
     public boolean isDatesOverlapped() {
-
         for (int i = 0; i < selectedCourses.size(); i++) {
             int dayLength = selectedCourses.get(i).getDays().size();
             for (int j = 0; j < dayLength; j++) {
@@ -110,6 +134,7 @@ public class CourseDetailPopup {
                 }
             }
         }
+
         return false;
     }
 }

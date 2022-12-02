@@ -15,10 +15,12 @@ import java.util.List;
 
 public class Recycle extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
     public final List<Object> listRecyclerItem;
+    Context context;
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     public Recycle(Context context, List<Object> listRecyclerItem) {
         this.listRecyclerItem = listRecyclerItem;
+        this.context = context;
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -52,7 +54,7 @@ public class Recycle extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 
             @Override
             public void onClick(View v) {
-                CourseDetailPopup courseDetailPopup = new CourseDetailPopup(course);
+                CourseDetailPopup courseDetailPopup = new CourseDetailPopup(course, false);
                 courseDetailPopup.showPopupWindow(v);
             }
         });

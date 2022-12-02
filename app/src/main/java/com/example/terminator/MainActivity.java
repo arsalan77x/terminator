@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<Course> allCourses = new ArrayList<>();
     private static final String TAG = "MainActivity";
     public static SharedPreferences sp ;
+    private final ArrayList<String> departments = new ArrayList<>(Arrays.asList("math","computer"));
 
 
     @Override
@@ -47,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         sp = getSharedPreferences("courses",MODE_PRIVATE);
         Button goScheduleButton = (Button) findViewById(R.id.go_schedule_button);
-        Button saveDataButton = (Button) findViewById(R.id.save_data_button);
+
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.departments, R.layout.spinner_layout);
@@ -56,14 +58,16 @@ public class MainActivity extends AppCompatActivity {
         Context c = getApplicationContext();
 
 
-        String department = "math";
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(c);
-        mRecyclerView.setLayoutManager(layoutManager);
-        viewItems.clear();
-        callJSON(department);
-        RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter = new Recycle(c, viewItems);
-        mRecyclerView.setAdapter(mAdapter);
+        for (int i = 0; i < departments.size(); i++) {
+            String department = departments.get(i);
+            RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(c);
+            mRecyclerView.setLayoutManager(layoutManager);
+            viewItems.clear();
+            callJSON(department);
+            RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter = new Recycle(c, viewItems);
+            mRecyclerView.setAdapter(mAdapter);
+        }
 
         goScheduleButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,19 +77,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        saveDataButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                SharedPreferences.Editor editor = sp.edit();
-                for (int i = 0; i < CourseDetailPopup.selectedCourses.size(); i++) {
-                    editor.putInt("id"+i,CourseDetailPopup.selectedCourses.get(i).getId());
-                }
-                editor.apply();
-
-                Toast.makeText(c, "برنامه شما ذخیره شد.", Toast.LENGTH_SHORT).show();
-            }
-        });
 
 
 
