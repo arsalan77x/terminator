@@ -3,6 +3,7 @@
     <string name="course_choose_title">Course list</string>
     <string name="course_name">Course name</string>
     <string name="schedule_title">برنامه هفتگی</string>
+    <string name="save">ذخیره</string>
     <string name="info_str">اطلاعات:</string>
     <string-array name="departments">
         <item>دانشکده ریاضی</item>

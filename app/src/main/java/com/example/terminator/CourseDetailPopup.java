@@ -1,6 +1,7 @@
 package com.example.terminator;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
@@ -13,14 +14,17 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class CourseDetailPopup {
+public class CourseDetailPopup{
     Course course;
-    ArrayList<Course> selectedCourses = new ArrayList<>();
+    public static ArrayList<Course> selectedCourses = new ArrayList<>();
     ArrayList<Integer> scheduledTimes = new ArrayList<>();
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    SharedPreferences sp;
 
     public CourseDetailPopup(Course course) {
         this.course = course;
@@ -62,11 +66,13 @@ public class CourseDetailPopup {
         capacityPopUp.setText(Integer.toString(this.course.getCapacity()));
         
         Button addButton = popupView.findViewById(R.id.add_button);
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (selectedCourses.size() == 0 || !isDatesOverlapped()) {
                     selectedCourses.add(course);
+
                     Toast.makeText(view.getContext(), "این درس به برنامه شما اضافه شد", Toast.LENGTH_SHORT).show();
                 }
                 else {

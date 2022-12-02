@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class Recycle extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class Recycle extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
     public final List<Object> listRecyclerItem;
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
