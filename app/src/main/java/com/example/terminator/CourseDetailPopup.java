@@ -19,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class CourseDetailPopup{
+public class CourseDetailPopup {
     Course course;
     public static ArrayList<Course> selectedCourses = new ArrayList<>();
     ArrayList<Integer> scheduledTimes = new ArrayList<>();
@@ -64,7 +64,7 @@ public class CourseDetailPopup{
         unitPopUp.setText(Integer.toString(this.course.getUnits()));
         TextView capacityPopUp = popupView.findViewById(R.id.course_capacity);
         capacityPopUp.setText(Integer.toString(this.course.getCapacity()));
-        
+
         Button addButton = popupView.findViewById(R.id.add_button);
 
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -72,10 +72,8 @@ public class CourseDetailPopup{
             public void onClick(View v) {
                 if (selectedCourses.size() == 0 || !isDatesOverlapped()) {
                     selectedCourses.add(course);
-
                     Toast.makeText(view.getContext(), "این درس به برنامه شما اضافه شد", Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     Toast.makeText(view.getContext(), "تداخل با برنامه درسی", Toast.LENGTH_SHORT).show();
 
                 }
@@ -89,17 +87,23 @@ public class CourseDetailPopup{
             }
         });
     }
-    
-    public boolean isDatesOverlapped(){
+
+    public boolean isDatesOverlapped() {
+
         for (int i = 0; i < selectedCourses.size(); i++) {
             int dayLength = selectedCourses.get(i).getDays().size();
             for (int j = 0; j < dayLength; j++) {
                 for (int k = 0; k < course.getDays().size(); k++) {
-                    if (Objects.equals(selectedCourses.get(i).getDays().get(j), course.getDays().get(k))){
-                        if (selectedCourses.get(i).getStart_times().get(j) < course.getEnd_times().get(k))
+                    if (Objects.equals(selectedCourses.get(i).getDays().get(j), course.getDays().get(k))) {
+                        if (selectedCourses.get(i).getStart_times().get(j) < course.getStart_times().get(k) &&
+                                course.getStart_times().get(k) < selectedCourses.get(i).getEnd_times().get(j)) {
                             return true;
-                        if (selectedCourses.get(i).getEnd_times().get(j) > course.getStart_times().get(k))
+                        }
+                        if (selectedCourses.get(i).getEnd_times().get(j) > course.getEnd_times().get(k) &&
+                                course.getEnd_times().get(k) > selectedCourses.get(i).getStart_times().get(j)) {
                             return true;
+                        }
+
                     }
                 }
 

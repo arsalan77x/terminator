@@ -24,7 +24,7 @@ public class Course {
     private final int id;
     private ArrayList<Float> start_times = new ArrayList<>();
     private ArrayList<Float> end_times = new ArrayList<>();
-    private final ArrayList<Integer> days = new ArrayList<>();
+    private  ArrayList<Integer> days = new ArrayList<>();
 
 
     public Course(String name, String info, String course_id, String course_number,
@@ -35,7 +35,7 @@ public class Course {
         this.course_id = course_id;
         this.course_number = course_number;
         this.instructor = instructor;
-        this.class_times = class_times;
+        this.class_times = calculate_time(class_times);
         this.exam_time = exam_time;
         this.units = units;
         this.capacity = capacity;
@@ -62,71 +62,80 @@ public class Course {
         return course_number;
     }
 
-    public String getClass_times() {
-        StringBuilder class_time = new StringBuilder();
-        String day = "";
-        Pattern p = Pattern.compile("\\d+\\.*\\d*");
-        Matcher m = p.matcher(class_times);
-        int check = 0;
-        while(m.find()) {
-            if (m.group().equals("0")){
-                day = "شنبه";
-                days.add(0);
-                class_time.deleteCharAt(class_time.length()-1);
-                class_time.append(" ").append(day).append("\n");
-            }
-            else if (m.group().equals("1")){
-                day = "یکشنبه";
-                days.add(1);
-                class_time.deleteCharAt(class_time.length()-1);
-                class_time.append(" ").append(day).append("\n");
-            }
-            else if (m.group().equals("2")){
-                day = "دوشنبه";
-                days.add(2);
-                class_time.deleteCharAt(class_time.length()-1);
-                class_time.append(" ").append(day).append("\n");
-            }
-            else if (m.group().equals("3")){
-                day = "سه شنبه";
-                days.add(3);
-                class_time.deleteCharAt(class_time.length()-1);
-                class_time.append(" ").append(day).append("\n");
-            }
-            else if (m.group().equals("4")){
-                day = "چهارشنبه";
-                days.add(4);
-                class_time.deleteCharAt(class_time.length()-1);
-                class_time.append(" ").append(day).append("\n");
-            }
-            else if (m.group().equals("5")){
-                day = "پنجشنبه";
-                days.add(5);
-                class_time.deleteCharAt(class_time.length()-1);
-                class_time.append(" ").append(day).append("\n");
-            }
-            else if (m.group().equals("6")){
-                day = "جمعه";
-                days.add(6);
-                class_time.deleteCharAt(class_time.length()-1);
-                class_time.append(" ").append(day).append("\n");
-            }
-            else {
-                class_time.append(m.group()).append("-");
-                if (check == 0) {
-                    start_times.add(Float.parseFloat(m.group()));
-                    check = 1;
-                } else {
-                    end_times.add(Float.parseFloat(m.group()));
-                    check = 0;
+    private String calculate_time(String time){
+        if (time.equals("[]"))
+            return "";
+        else{
+
+            StringBuilder class_time = new StringBuilder();
+            String day = "";
+            Pattern p = Pattern.compile("\\d+\\.*\\d*");
+            Matcher m = p.matcher(time);
+            int check = 0;
+            while(m.find()) {
+                if (m.group().equals("0")){
+                    day = "شنبه";
+                    days.add(0);
+                    class_time.deleteCharAt(class_time.length()-1);
+                    class_time.append(" ").append(day).append("\n");
+                }
+                else if (m.group().equals("1")){
+                    day = "یکشنبه";
+                    days.add(1);
+                    class_time.deleteCharAt(class_time.length()-1);
+                    class_time.append(" ").append(day).append("\n");
+                }
+                else if (m.group().equals("2")){
+                    day = "دوشنبه";
+                    days.add(2);
+                    class_time.deleteCharAt(class_time.length()-1);
+                    class_time.append(" ").append(day).append("\n");
+                }
+                else if (m.group().equals("3")){
+                    day = "سه شنبه";
+                    days.add(3);
+                    class_time.deleteCharAt(class_time.length()-1);
+                    class_time.append(" ").append(day).append("\n");
+                }
+                else if (m.group().equals("4")){
+                    day = "چهارشنبه";
+                    days.add(4);
+                    class_time.deleteCharAt(class_time.length()-1);
+                    class_time.append(" ").append(day).append("\n");
+                }
+                else if (m.group().equals("5")){
+                    day = "پنجشنبه";
+                    days.add(5);
+                    class_time.deleteCharAt(class_time.length()-1);
+                    class_time.append(" ").append(day).append("\n");
+                }
+                else if (m.group().equals("6")){
+                    day = "جمعه";
+                    days.add(6);
+                    class_time.deleteCharAt(class_time.length()-1);
+                    class_time.append(" ").append(day).append("\n");
+                }
+                else {
+                    class_time.append(m.group()).append("-");
+                    if (check == 0) {
+                        start_times.add(Float.parseFloat(m.group()));
+                        check = 1;
+                    } else {
+                        end_times.add(Float.parseFloat(m.group()));
+                        check = 0;
+                    }
                 }
             }
+            class_time.deleteCharAt(class_time.length() - 1);
+            String res = class_time.toString().replaceAll("\\.",":");
+            if (res.contains(":5")){
+                res = res.replaceAll(":5",":30");
+            }
+            return res;
         }
-        class_time.deleteCharAt(class_time.length() - 1);
-        this.class_times = class_time.toString().replaceAll("\\.",":");
-        if (this.class_times.contains(":5")){
-            this.class_times = this.class_times.replaceAll(":5",":30");
-        }
+    }
+
+    public String getClass_times() {
         return class_times;
 
     }

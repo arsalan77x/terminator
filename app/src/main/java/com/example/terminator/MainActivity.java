@@ -61,14 +61,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         saveDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(LOG_TAG,Integer.toString(sp.getAll().size()));
                 SharedPreferences.Editor editor = sp.edit();
                 for (int i = 0; i < CourseDetailPopup.selectedCourses.size(); i++) {
                     editor.putInt("id"+i,CourseDetailPopup.selectedCourses.get(i).getId());
                 }
                 editor.apply();
+
                 //int test = getSp.getInt("id1",0);
                 //Log.d(LOG_TAG, Integer.toString(test));
                 Toast.makeText(c, "برنامه شما ذخیره شد.", Toast.LENGTH_SHORT).show();
